@@ -1,5 +1,6 @@
-// TODO: What do we need to do to make Underscore "requireable"?
+// TODONE: What do we need to do to make Underscore "requireable"?
 var _ = require('underscore');
+// ^ npm install underscore
 
 function Person(properties) {
     // This is how you can use underscore to extend the constructed object with some default
@@ -9,5 +10,5 @@ function Person(properties) {
     }, properties);
 }
 
-// TODO: How do we expose the constructor AS the module?
-CHANGE.ME = Person;
+// TODONE: How do we expose the constructor AS the module?
+module.exports = Person;

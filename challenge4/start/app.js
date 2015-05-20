@@ -24,8 +24,8 @@ app.configure('development', function() {
 // Render our home page with all blog posts
 app.get('/', function(request, response) {
 
-    // TODO: How do we get a list of all model objects using a mongoose model?
-    Post.CHANGEME(function(err, posts) {
+    // TODONE: How do we get a list of all model objects using a mongoose model?
+    Post.find({}, function(err, posts) {
         if (err) {
             response.send(500, 'There was an error - tough luck.');
         }
@@ -36,19 +36,43 @@ app.get('/', function(request, response) {
         }
     });
 });
+// Render our home page with all blog posts
+app.get('/posts.json', function(request, response) {
+
+    // TODO: How do we get a list of all model objects using a mongoose model?
+    Post.find({}, function(err, posts) {
+        if (err) {
+            response.send(500, { success: false});
+        }
+        else {
+            response.send({
+                success:true, 
+                posts:posts
+            });
+        }
+    });
+});
+
+
+// auth middleware
+var auth = express.basicAuth(function(username, password) {
+    return username === 'foo' && password === 'bar';
+});
 
 // Render a form to enter a new post
-app.get('/new', function(request, response) {
+app.get('/new', auth, function(request, response) {
     response.render('new', {});
 });
 
 // create a new blog post object
-app.post('/create', function(request, response) {
-    // TODO: Create and save a Post model
-    var post = CHANGEME();
+app.post('/create', auth, function(request, response) {
+    // TODONE: Create and save a Post model
+    var post = new Post({ title: request.param('title'), content: request.param('content')});
+    // OR: request.body.title, request.body.content
 
-    // TODO: Save the model
-    post.CHANGEME(function(err, model) {
+    console.log(post);
+    // TODONE: Save the model
+    post.save(function(err, model) {
         if (err) {
             response.send(500, 'There was an error - tough luck.');
         }
