@@ -6,26 +6,39 @@
     <script>
         var socket = io.connect();
         socket.on('chat', function (data) {
-            $('textarea').val($('textarea').val()+data.message+'\n');
+            $('textarea').val($('textarea').val()+data.nick+': '+data.message+'\n');
         });
 
         // Handle UI
         $(function() {
-            $('button').on('click', function() {
-                console.log($('input').val());
+            $('#setnick').on('click', function() {
+                socket.emit('nick', $('#nick').val());
+                $('#nick').val($('#nick_input').val());
+            });
+            $('#send').on('click', function() {
+                console.log($('#message').val());
                 socket.emit('chat', {
-                    message:$('input').val()
+                    message:$('#message').val()
                 });
             });
         });
     </script>
 </head>
 <body>
-    <h1>Simple Chat</h1>
-    <textarea style="height:300px;width:500px;"></textarea>
+    <!-- TODONE
+        set nickname
+        show who sent what message 
+    -->
+    <h1>Super Duper Chat</h1>
     <p>
-        <input type="text"/>
-        <button>Send Chat Message</button>
+        <input id="nick" type="text" value="Anonymous"/><button id="setnick">Set Nickname</button>
+    </p>
+    <p>
+        <textarea style="height:300px;width:500px;"></textarea>
+    </p>
+    <p>
+        <input id="message" type="text"/>
+        <button id="send">Send Chat Message</button>
     </p>
 </body>
 </html>
